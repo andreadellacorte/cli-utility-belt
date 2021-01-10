@@ -6,6 +6,7 @@ GEM
     toys-core (0.11.4)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES
