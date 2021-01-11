@@ -40,13 +40,7 @@ tool "setup" do
     Utils.system('git config --global user.name "Andrea Della Corte"')
     Utils.system('git config --global github.user andreadellacorte')
 
-    unless File.exist?("#{Dir.home}/.ssh/id_rsa")
-      Utils.system('ssh-keygen -t rsa -b 4096 -C "andrea@dellacorte.me"')
-    end
-    Utils.system("eval \$(ssh-agent)")
-    Utils.system('ssh-add ~/.ssh/id_rsa')
-
-    Utils.system("rbenv rehash")
+    Helpers.my_runner("rbenv rehash")
 
     Utils.system("rbenv install --skip-existing 3.0.0")
     Utils.system("rbenv global 3.0.0")
