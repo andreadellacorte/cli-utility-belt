@@ -40,12 +40,6 @@ tool "setup" do
     Helpers.my_runner('git config --global user.name "Andrea Della Corte"')
     Helpers.my_runner('git config --global github.user andreadellacorte')
 
-    unless File.exist?("#{Dir.home}/.ssh/id_rsa")
-      Helpers.my_runner('ssh-keygen -t rsa -b 4096 -C "andrea@dellacorte.me"')
-    end
-    Helpers.my_runner("eval \$(ssh-agent)")
-    Helpers.my_runner('ssh-add ~/.ssh/id_rsa')
-
     Helpers.my_runner("rbenv rehash")
 
     Helpers.my_runner("rbenv install --skip-existing 3.0.0")
