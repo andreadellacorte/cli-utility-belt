@@ -56,10 +56,10 @@ tool "setup" do
     Helpers.my_runner('gem install bundler')
     Helpers.my_runner('gem install jekyll')
     Helpers.my_runner('gem install rails')
-    Helpers.my_runner('sudo apt-get install libsqlite3-dev')
+    Helpers.my_runner('sudo apt-get install -y ruby-dev libsqlite3-dev sqlite3')
     Helpers.my_runner('sudo gem install sqlite3-ruby')
     Helpers.my_runner('sudo apt-get install build-essential')
-    Helpers.my_runner('sudo apt-get install imagemagick'
+    Helpers.my_runner('sudo apt-get install imagemagick')
 
     Helpers.my_runner("sudo apt-get install -y fasd")
 
