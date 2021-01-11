@@ -29,6 +29,10 @@ tool "setup" do
     unless File.exist?("#{Dir.home}/.oh-my-zsh")
       Helpers.my_runner('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
     end
+
+    Helpers.my_runner('curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -')
+    Helpers.my_runner('sudo apt-get install -y nodejs')
+
     Helpers.my_runner("rbenv rehash")
 
     Helpers.my_runner("rbenv install --skip-existing 3.0.0")
