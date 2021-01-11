@@ -40,7 +40,7 @@ tool "setup" do
     Utils.system('git config --global user.name "Andrea Della Corte"')
     Utils.system('git config --global github.user andreadellacorte')
 
-    Helpers.my_runner("rbenv rehash")
+    Utils.system("rbenv rehash")
 
     Utils.system("rbenv install --skip-existing 3.0.0")
     Utils.system("rbenv global 3.0.0")
