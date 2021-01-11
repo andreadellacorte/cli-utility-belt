@@ -1,9 +1,8 @@
-module Helpers
-
-  def self.my_runner(command)
+module Utils
+  def self.system(command)
     puts "Running #{command}"
     begin
-      system(command, exception: true)
+      Kernel.system(command, exception: true)
     rescue RuntimeError => exception
       abort("Error running script: #{exception}")
     end
