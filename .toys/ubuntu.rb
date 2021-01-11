@@ -33,6 +33,17 @@ tool "setup" do
     Helpers.my_runner('curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -')
     Helpers.my_runner('sudo apt-get install -y nodejs')
 
+    Helpers.my_runner('sudo apt-get install -y gcc g++ make')
+
+    Helpers.my_runner('git config --global user.email "andrea@dellacorte.me"')
+    Helpers.my_runner('git config --global user.name "Andrea Della Corte"')
+
+    unless File.exist?("#{Dir.home}/.ssh/id_rsa")
+      Helpers.my_runner('ssh-keygen -t rsa -b 4096 -C "andrea@dellacorte.me"')
+    end
+    Helpers.my_runner("eval \$(ssh-agent)")
+    Helpers.my_runner('ssh-add ~/.ssh/id_rsa')
+
     Helpers.my_runner("rbenv rehash")
 
     Helpers.my_runner("rbenv install --skip-existing 3.0.0")
