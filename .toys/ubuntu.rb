@@ -38,6 +38,7 @@ tool "setup" do
     Helpers.my_runner('sudo apt-get install -y git')
     Helpers.my_runner('git config --global user.email "andrea@dellacorte.me"')
     Helpers.my_runner('git config --global user.name "Andrea Della Corte"')
+    Helpers.my_runner('git config --global github.user andreadellacorte')
 
     unless File.exist?("#{Dir.home}/.ssh/id_rsa")
       Helpers.my_runner('ssh-keygen -t rsa -b 4096 -C "andrea@dellacorte.me"')
@@ -49,6 +50,16 @@ tool "setup" do
 
     Helpers.my_runner("rbenv install --skip-existing 3.0.0")
     Helpers.my_runner("rbenv global 3.0.0")
+
+    Helpers.my_runner('gem update')
+    Helpers.my_runner('gem update --system')
+    Helpers.my_runner('gem install bundler')
+    Helpers.my_runner('gem install jekyll')
+    Helpers.my_runner('gem install rails')
+    Helpers.my_runner('sudo apt-get install libsqlite3-dev')
+    Helpers.my_runner('sudo gem install sqlite3-ruby')
+    Helpers.my_runner('sudo apt-get install build-essential')
+    Helpers.my_runner('sudo apt-get install imagemagick'
 
     Helpers.my_runner("sudo apt-get install -y fasd")
 
