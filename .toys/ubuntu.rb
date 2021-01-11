@@ -10,7 +10,7 @@ long_desc "Contains tools that setup, configure and update Ubuntu. Tested on 20.
 include :terminal
 
 tool "setup" do
-  desc "Print the current Toys version"
+  desc "Sets up Ubuntu to a known state"
 
   def run
     Utils.system("sudo add-apt-repository -y ppa:aacebedo/fasd")
@@ -69,7 +69,7 @@ tool "setup" do
 end
 
 tool "update" do
-  desc "Update tools"
+  desc "Update the tools installed above"
 
   def run
     if File.exist?("#{Utils::rbenv_home}/plugins/ruby-build")
