@@ -16,7 +16,7 @@ tool "setup" do
     Helpers.my_runner("sudo add-apt-repository -y ppa:aacebedo/fasd")
 
     Helpers.my_runner("sudo apt --quiet update")
-    Helpers.my_runner("sudo apt --quiet install rbenv")
+    Helpers.my_runner("sudo apt-get --quiet install rbenv")
 
     if File.exist?("#{Helpers::rbenv_home}/plugins/ruby-build")
       Helpers.my_runner("git -C $(rbenv root)/plugins/ruby-build pull")
@@ -35,6 +35,7 @@ tool "setup" do
 
     Helpers.my_runner('sudo apt-get install -y gcc g++ make')
 
+    Helpers.my_runner('sudo apt-get install -y git')
     Helpers.my_runner('git config --global user.email "andrea@dellacorte.me"')
     Helpers.my_runner('git config --global user.name "Andrea Della Corte"')
 
