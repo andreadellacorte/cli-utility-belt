@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require_relative '../lib/helpers'
+require 'date'
 
-desc "A set of system commands for Toys"
+desc "Helps you setup a new Ubuntu machines consistently and swiftly"
 
-long_desc "Contains tools that inspect, configure, and update Toys itself."
+long_desc "Contains tools that setup, configure and update Ubuntu. Tested on 20.04."
 
 include :terminal
 
@@ -25,17 +26,21 @@ tool "setup" do
     end
 
     Helpers.my_runner('sudo apt-get -y install zsh')
-    Helpers.my_runner('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
-
+    unless File.exist?("#{Dir.home}/.oh-my-zsh")
+      Helpers.my_runner('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
+    end
     Helpers.my_runner("rbenv rehash")
+
+    Helpers.my_runner("rbenv install --skip-existing 3.0.0")
+    Helpers.my_runner("rbenv global 3.0.0")
 
     Helpers.my_runner("sudo apt-get install -y fasd")
 
     Helpers.my_runner("sudo apt-get autoremove")
     Helpers.my_runner("sudo apt-get clean")
 
-    Helpers.my_runner('mkdir -p ~/.dotfiles_backup')
-    Helpers.my_runner('mv ~/.zshrc ~/.dotfiles_backup')
+    Helpers.my_runner("mkdir -p ~/.dotfiles_backup_#{DateTime.now}")
+    Helpers.my_runner("mv ~/.zshrc ~/.dotfiles_backup_#{DateTime.now}")
 
     Helpers.my_runner('cp -r .dotfiles ~')
     Helpers.my_runner('ln -s ~/.dotfiles/.zshrc ~/.zshrc')
