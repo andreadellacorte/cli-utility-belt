@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../lib/utils'
-require 'date'
 
 desc "Helps you setup a new Ubuntu machines consistently and swiftly"
 
@@ -13,6 +12,9 @@ tool "setup" do
   desc "Sets up Ubuntu to a known state"
 
   def run
+
+    puts "Writing logs to #{Utils.log_folder}"
+
     # https://github.com/cli/cli
     Utils.system('sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C99B11DEB97541F0')
     Utils.system('sudo apt-add-repository https://cli.github.com/packages')
@@ -72,25 +74,32 @@ tool "setup" do
     Utils.system('gem install bundler')
     Utils.system('gem install jekyll')
 
-    # suspenders
-    Utils.system('sudo apt-get install libpq-dev')
-    Utils.system('gem install suspenders')
-
     # rails
     Utils.system('gem install rails')
-    Utils.system('sudo apt-get install -y ruby-dev libsqlite3-dev sqlite3')
+    Utils.system('sudo apt-get install -y --quiet postgresql postgresql-contrib libpq-dev')
+    Utils.system('sudo apt-get install -y --quiet ruby-dev libsqlite3-dev sqlite3')
     Utils.system('sudo gem install sqlite3-ruby')
 
-    # imagemagick
-    Utils.system('sudo apt-get install build-essential')
-    Utils.system('sudo apt-get install imagemagick')
+    # suspenders for rails
+    Utils.system('sudo apt-get install -y --quiet libpq-dev')
+    Utils.system('gem install suspenders')
 
-    # fasd cli tool
-    Utils.system("sudo apt-get install -y fasd")
+    # imagemagick
+    Utils.system('sudo apt-get install -y --quiet build-essential')
+    Utils.system('sudo apt-get install -y --quiet imagemagick')
+
+    # https://github.com/clvv/fasd
+    Utils.system('sudo apt-get install -y --quiet fasd')
+
+    # https://github.com/ytdl-org/youtube-dl
+    Utils.system('sudo apt-get install -y --quiet youtube-dl')
+
+    # https://github.com/sindresorhus/fkill-cli
+    Utils.system("sudo npm install --global fkill-cli")
 
     # dotfiles
-    Utils.system("mkdir -p ~/.dotfiles_backup_#{DateTime.now}")
-    Utils.system("mv ~/.zshrc ~/.dotfiles_backup_#{DateTime.now}")
+    Utils.system("mkdir -p ~/.dotfiles_backup_#{$time}")
+    Utils.system("mv ~/.zshrc ~/.dotfiles_backup_#{$time}")
     Utils.system('cp -r .dotfiles ~')
     Utils.system('ln -s ~/.dotfiles/.zshrc ~/.zshrc')
 

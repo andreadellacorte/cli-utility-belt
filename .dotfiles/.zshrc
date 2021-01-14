@@ -106,3 +106,5 @@ source $ZSH/oh-my-zsh.sh
 eval "$(fasd --init auto)"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+export PATH="$(echo $PATH | tr ':' '\n' | awk '($0!~/mnt\/c/) {print} ' | tr '\n' ':' | sed 's/.$//')"
