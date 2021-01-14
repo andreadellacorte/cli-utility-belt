@@ -12,9 +12,6 @@ tool "setup" do
   desc "Sets up Ubuntu to a known state"
 
   def run
-
-    puts "Writing logs to #{Utils.log_folder}"
-
     # https://github.com/cli/cli
     Utils.system('sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C99B11DEB97541F0')
     Utils.system('sudo apt-add-repository https://cli.github.com/packages')
@@ -87,6 +84,7 @@ tool "setup" do
     # imagemagick
     Utils.system('sudo apt-get install -y --quiet build-essential')
     Utils.system('sudo apt-get install -y --quiet imagemagick')
+    Utils.system('sudo apt-get install -y --quiet ghostscript')
 
     # https://github.com/clvv/fasd
     Utils.system('sudo apt-get install -y --quiet fasd')

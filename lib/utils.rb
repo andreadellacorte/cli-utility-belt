@@ -8,9 +8,14 @@ Whirly.configure stop: '✅'
 module Utils
 
   $time = DateTime.now
+  $pwd = Dir.pwd
+  $init = false
 
   def self.system(command)
 
+    puts "Writing logs to #{Utils.log_folder}" unless $init
+    $init = true
+    
     Kernel.system('mkdir -p logs')
 
     begin
@@ -26,7 +31,7 @@ module Utils
   end
 
   def self.log_folder
-    "logs/logs_#{$time}.txt"
+    "#{$pwd}/logs/logs_#{$time}.txt"
   end
 
   def self.rbenv_home

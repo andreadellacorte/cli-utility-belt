@@ -17,6 +17,24 @@ tool "dirdos2unix" do
     bookmark = Dir.pwd
     Dir.chdir folder
     Utils.system('find . -type f -print0 | xargs -0 dos2unix')
-    Dir.chdir current_folder
+    Dir.chdir bookmark
+  end
+end
+
+tool "makelookscanned" do
+  desc "Makes a file look scanned"
+
+  required_arg :file
+
+  def run
+    foldername = File.dirname file
+    filename = File.basename file
+
+    bookmark = Dir.pwd
+    Dir.chdir foldername
+
+    Utils.system("convert -density 150 #{filename} -colorspace 'gray' +noise Gaussian -rotate 0.5 -depth 2 scanned_#{filename}")
+
+    Dir.chdir bookmark
   end
 end
