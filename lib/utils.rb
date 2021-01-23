@@ -9,7 +9,7 @@ Whirly.configure stop: '✅'
 
 class Utils
   def initialize
-    @@time = DateTime.now
+    @@time = DateTime.now.strftime("%Y-%m-%d_%H-%M-%S")
     @@pwd = Dir.pwd
     @@init = false
     @@log_file = "#{@@pwd}/logs/logs_#{@@time}.txt"
@@ -20,7 +20,8 @@ class Utils
   end
 
   def system(command)
-    puts ("Writing logs to #{@@log_file}") and @@init = true unless @@init
+    puts ("Writing logs to #{@@log_file}") unless @@init
+    @@init = true
 
     Kernel.system('mkdir -p logs', exception: true, %i[out err] => [@@log_file, 'a'])
 
