@@ -16,12 +16,12 @@ module Utils
   end
 
   def self.system(command)
-    puts Kernel.system('test')
+    puts Kernel.system('test', exception: true)
 
     puts "Writing logs to #{Utils.log_folder}" unless $init
     $init = true
 
-    Kernel.system('mkdir -p logs')
+    Kernel.system('mkdir -p logs', exception: true)
 
     begin
       Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true)
