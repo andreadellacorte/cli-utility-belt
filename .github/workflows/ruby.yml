@@ -33,3 +33,6 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Verify ubuntu command
       run: bundle exec toys ubuntu setup
+      with:
+        name: logs
+        path: logs/*.txt
