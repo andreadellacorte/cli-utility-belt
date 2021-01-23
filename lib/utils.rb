@@ -22,7 +22,7 @@ class Utils
   def system(command)
     puts ("Writing logs to #{@@log_file}") and @@init = true unless @@init
 
-    puts Kernel.system('mkdir -p logs', exception: true, %i[out err] => [@@log_file, 'a'])
+    Kernel.system('mkdir -p logs', exception: true, %i[out err] => [@@log_file, 'a'])
 
     begin
       Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true, %i[out err] => [@@log_file, 'a'])
