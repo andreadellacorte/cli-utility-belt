@@ -32,4 +32,4 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Verify ubuntu command
-      run: toys ubuntu setup
+      run: bundle exec toys ubuntu setup
