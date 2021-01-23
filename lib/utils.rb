@@ -16,8 +16,6 @@ module Utils
   end
 
   def self.system(command)
-    puts Kernel.system('test', exception: true)
-
     puts "Writing logs to #{Utils.log_folder}" unless $init
     $init = true
 
