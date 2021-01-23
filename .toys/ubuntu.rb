@@ -23,33 +23,35 @@ tool "setup" do
     # https://github.com/clvv/fasd
     Utils.system("sudo add-apt-repository -y ppa:aacebedo/fasd") #fasd
 
+    # update repos after adding new ones
+    Utils.system("sudo apt --quiet update")
+
     # oh-my-zsh
-    Utils.system('sudo apt-get -y --quiet install zsh')
+    Utils.apt_install('zsh')
+
     unless File.exist?("#{Dir.home}/.oh-my-zsh")
       Utils.system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
     end
 
     # NodeJS
     Utils.system('curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -')
-    Utils.system('sudo apt-get install --quiet -y nodejs')
+    Utils.apt_install('nodejs')
 
     # yarn
-    Utils.system('sudo apt install yarn')
+    Utils.apt_install('yarn')
 
     # C++ tools
-    Utils.system('sudo apt-get install --quiet -y gcc g++ make')
+    Utils.apt_install('gcc g++ make')
 
-    # github cli
-    Utils.system('sudo apt install gh')
-
-    Utils.system('sudo apt-get install --quiet -y git')
+    # git + github cli
+    Utils.apt_install('git')
+    Utils.apt_install('gh')
     Utils.system('git config --global user.email "andrea@dellacorte.me"')
     Utils.system('git config --global user.name "Andrea Della Corte"')
     Utils.system('git config --global github.user andreadellacorte')
 
     # rbenv
-    Utils.system("sudo apt --quiet update")
-    Utils.system("sudo apt-get --quiet install rbenv")
+    Utils.apt_install('rbenv')
 
     # ruby-build plugin for rbenv
     if File.exist?("#{Utils::rbenv_home}/plugins/ruby-build")
@@ -73,24 +75,24 @@ tool "setup" do
 
     # rails
     Utils.system('gem install rails')
-    Utils.system('sudo apt-get install -y --quiet postgresql postgresql-contrib libpq-dev')
-    Utils.system('sudo apt-get install -y --quiet ruby-dev libsqlite3-dev sqlite3')
+    Utils.apt_install('postgresql postgresql-contrib libpq-dev')
+    Utils.apt_install('ruby-dev libsqlite3-dev sqlite3')
     Utils.system('sudo gem install sqlite3-ruby')
 
     # suspenders for rails
-    Utils.system('sudo apt-get install -y --quiet libpq-dev')
+    Utils.apt_install('libpq-dev')
     Utils.system('gem install suspenders')
 
     # imagemagick
-    Utils.system('sudo apt-get install -y --quiet build-essential')
-    Utils.system('sudo apt-get install -y --quiet imagemagick')
-    Utils.system('sudo apt-get install -y --quiet ghostscript')
+    Utils.apt_install('build-essential')
+    Utils.apt_install('imagemagick')
+    Utils.apt_install('ghostscript')
 
     # https://github.com/clvv/fasd
-    Utils.system('sudo apt-get install -y --quiet fasd')
+    Utils.apt_install('fasd')
 
     # https://github.com/ytdl-org/youtube-dl
-    Utils.system('sudo apt-get install -y --quiet youtube-dl')
+    Utils.apt_install('youtube-dl')
 
     # https://github.com/sindresorhus/fkill-cli
     Utils.system("sudo npm install --global fkill-cli")
