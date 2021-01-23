@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'whirly'
 require 'paint'
 require 'date'
@@ -5,39 +7,35 @@ require 'date'
 Whirly.configure spinner: 'dots'
 Whirly.configure stop: '✅'
 
-module Utils
-
-  $time = DateTime.now
-  $pwd = Dir.pwd
-  $init = false
-
-  def self.apt_install(packages)
-    system("sudo apt-get install -y --quiet " + packages)
+class Utils
+  def initialize
+    @@time = DateTime.now
+    @@pwd = Dir.pwd
+    @@init = false
+    @@log_file = "#{@@pwd}/logs/logs_#{@@time}.txt"
   end
 
-  def self.system(command)
-    puts "Writing logs to #{Utils.log_file}" unless $init
-    $init = true
+  def apt_install(packages)
+    system("sudo apt-get install -y --quiet #{packages}")
+  end
 
-    puts Kernel.system('mkdir -p logs', exception: true, [:out, :err] => [self.log_file, 'a'])
+  def system(command)
+    puts ("Writing logs to #{@@log_file}") and @@init = true unless @@init
+
+    puts Kernel.system('mkdir -p logs', exception: true, %i[out err] => [@@log_file, 'a'])
 
     begin
-      Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true)
+      Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true, %i[out err] => [@@log_file, 'a'])
       Whirly.start do
         Whirly.status = "Running #{command}"
-        Kernel.system(command, exception: true, [:out, :err] => [self.log_file, 'a'])
-        sleep 0.1
+        Kernel.system(command, exception: true, %i[out err] => [@@log_file, 'a'])
       end
-    rescue RuntimeError => exception
-      abort("Error running script: #{exception} - see #{self.log_file} for details")
+    rescue RuntimeError => e
+      abort("Error running script: #{e} - see #{@@log_file} for details")
     end
   end
 
-  def self.log_file
-    "#{$pwd}/logs/logs_#{$time}.txt"
-  end
-
-  def self.rbenv_home
+  def rbenv_home
     return '' if `which rbenv`.empty?
 
     `echo $(rbenv root)`.delete!("\n")

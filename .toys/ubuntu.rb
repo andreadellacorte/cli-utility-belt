@@ -12,100 +12,101 @@ tool "setup" do
   desc "Sets up Ubuntu to a known state"
 
   def run
+    utils = Utils.new
     # https://github.com/cli/cli
-    Utils.system('sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C99B11DEB97541F0')
-    Utils.system('sudo apt-add-repository https://cli.github.com/packages')
+    utils.system('sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C99B11DEB97541F0')
+    utils.system('sudo apt-add-repository https://cli.github.com/packages')
 
     # yarn
-    Utils.system('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -')
-    Utils.system('echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list')
+    utils.system('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -')
+    utils.system('echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list')
 
     # https://github.com/clvv/fasd
-    Utils.system("sudo add-apt-repository -y ppa:aacebedo/fasd") #fasd
+    utils.system("sudo add-apt-repository -y ppa:aacebedo/fasd") #fasd
 
     # update repos after adding new ones
-    Utils.system("sudo apt --quiet update")
+    utils.system("sudo apt --quiet update")
 
     # oh-my-zsh
-    Utils.apt_install('zsh')
+    utils.apt_install('zsh')
 
     unless File.exist?("#{Dir.home}/.oh-my-zsh")
-      Utils.system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
+      utils.system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
     end
 
     # NodeJS
-    Utils.system('curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -')
-    Utils.apt_install('nodejs')
+    utils.system('curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -')
+    utils.apt_install('nodejs')
 
     # yarn
-    Utils.apt_install('yarn')
+    utils.apt_install('yarn')
 
     # C++ tools
-    Utils.apt_install('gcc g++ make')
+    utils.apt_install('gcc g++ make')
 
     # git + github cli
-    Utils.apt_install('git')
-    Utils.apt_install('gh')
-    Utils.system('git config --global user.email "andrea@dellacorte.me"')
-    Utils.system('git config --global user.name "Andrea Della Corte"')
-    Utils.system('git config --global github.user andreadellacorte')
+    utils.apt_install('git')
+    utils.apt_install('gh')
+    utils.system('git config --global user.email "andrea@dellacorte.me"')
+    utils.system('git config --global user.name "Andrea Della Corte"')
+    utils.system('git config --global github.user andreadellacorte')
 
     # rbenv
-    Utils.apt_install('rbenv')
+    utils.apt_install('rbenv')
 
     # ruby-build plugin for rbenv
-    if File.exist?("#{Utils::rbenv_home}/plugins/ruby-build")
-      Utils.system("git -C $(rbenv root)/plugins/ruby-build pull")
+    if File.exist?("#{utils::rbenv_home}/plugins/ruby-build")
+      utils.system("git -C $(rbenv root)/plugins/ruby-build pull")
     else
-      Utils.system("mkdir -p $(rbenv root)/plugins")
-      Utils.system("git clone https://github.com/rbenv/ruby-build.git $(rbenv root)/plugins/ruby-build")
+      utils.system("mkdir -p $(rbenv root)/plugins")
+      utils.system("git clone https://github.com/rbenv/ruby-build.git $(rbenv root)/plugins/ruby-build")
     end
 
-    Utils.system("rbenv rehash")
+    utils.system("rbenv rehash")
 
     # ruby
-    Utils.system("rbenv install --skip-existing 2.6.6") # compatible with suspenders
-    Utils.system("rbenv global 2.6.6")
+    utils.system("rbenv install --skip-existing 2.6.6") # compatible with suspenders
+    utils.system("rbenv global 2.6.6")
 
     # gems
-    Utils.system('gem update')
-    Utils.system('gem update --system')
-    Utils.system('gem install bundler')
-    Utils.system('gem install jekyll')
+    utils.system('gem update')
+    utils.system('gem update --system')
+    utils.system('gem install bundler')
+    utils.system('gem install jekyll')
 
     # rails
-    Utils.system('gem install rails')
-    Utils.apt_install('postgresql postgresql-contrib libpq-dev')
-    Utils.apt_install('ruby-dev libsqlite3-dev sqlite3')
-    Utils.system('sudo gem install sqlite3-ruby')
+    utils.system('gem install rails')
+    utils.apt_install('postgresql postgresql-contrib libpq-dev')
+    utils.apt_install('ruby-dev libsqlite3-dev sqlite3')
+    utils.system('sudo gem install sqlite3-ruby')
 
     # suspenders for rails
-    Utils.apt_install('libpq-dev')
-    Utils.system('gem install suspenders')
+    utils.apt_install('libpq-dev')
+    utils.system('gem install suspenders')
 
     # imagemagick
-    Utils.apt_install('build-essential')
-    Utils.apt_install('imagemagick')
-    Utils.apt_install('ghostscript')
+    utils.apt_install('build-essential')
+    utils.apt_install('imagemagick')
+    utils.apt_install('ghostscript')
 
     # https://github.com/clvv/fasd
-    Utils.apt_install('fasd')
+    utils.apt_install('fasd')
 
     # https://github.com/ytdl-org/youtube-dl
-    Utils.apt_install('youtube-dl')
+    utils.apt_install('youtube-dl')
 
     # https://github.com/sindresorhus/fkill-cli
-    Utils.system("sudo npm install --global fkill-cli")
+    utils.system("sudo npm install --global fkill-cli")
 
     # dotfiles
-    Utils.system("mkdir -p ~/.dotfiles_backup_#{$time}")
-    Utils.system("mv ~/.zshrc ~/.dotfiles_backup_#{$time}")
-    Utils.system('cp -r .dotfiles ~')
-    Utils.system('ln -s ~/.dotfiles/.zshrc ~/.zshrc')
+    utils.system("mkdir -p ~/.dotfiles_backup_#{$time}")
+    utils.system("mv ~/.zshrc ~/.dotfiles_backup_#{$time}")
+    utils.system('cp -r .dotfiles ~')
+    utils.system('ln -s ~/.dotfiles/.zshrc ~/.zshrc')
 
     # cleanup
-    Utils.system("sudo apt-get autoremove")
-    Utils.system("sudo apt-get clean")
+    utils.system("sudo apt-get autoremove")
+    utils.system("sudo apt-get clean")
   end
 end
 
@@ -113,14 +114,16 @@ tool "update" do
   desc "Update the tools installed above"
 
   def run
-    if File.exist?("#{Utils::rbenv_home}/plugins/ruby-build")
-      Utils.system("git -C $(rbenv root)/plugins/ruby-build pull")
+    utils = Utils.new
+    
+    if File.exist?("#{utils::rbenv_home}/plugins/ruby-build")
+      utils.system("git -C $(rbenv root)/plugins/ruby-build pull")
     end
 
-    Utils.system("sudo apt -y update")
-    Utils.system("sudo apt -y upgrade")
+    utils.system("sudo apt -y update")
+    utils.system("sudo apt -y upgrade")
 
-    Utils.system("sudo apt-get autoremove")
-    Utils.system("sudo apt-get clean")
+    utils.system("sudo apt-get autoremove")
+    utils.system("sudo apt-get clean")
   end
 end
