@@ -16,24 +16,24 @@ module Utils
   end
 
   def self.system(command)
-    puts "Writing logs to #{Utils.log_folder}" unless $init
+    puts "Writing logs to #{Utils.log_file}" unless $init
     $init = true
 
-    Kernel.system('mkdir -p logs', exception: true)
+    puts Kernel.system('mkdir -p logs', exception: true, [:out, :err] => [self.log_file, 'a'])
 
     begin
       Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true)
       Whirly.start do
         Whirly.status = "Running #{command}"
-        Kernel.system(command, exception: true, [:out, :err] => [self.log_folder, 'a'])
+        Kernel.system(command, exception: true, [:out, :err] => [self.log_file, 'a'])
         sleep 0.1
       end
     rescue RuntimeError => exception
-      abort("Error running script: #{exception} - see #{self.log_folder} for details")
+      abort("Error running script: #{exception} - see #{self.log_file} for details")
     end
   end
 
-  def self.log_folder
+  def self.log_file
     "#{$pwd}/logs/logs_#{$time}.txt"
   end
 
