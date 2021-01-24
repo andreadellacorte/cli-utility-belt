@@ -103,7 +103,11 @@ tool "setup" do
     # https://github.com/sindresorhus/fkill-cli
     utils.npm_install('fkill-cli')
 
+    # https://github.com/sindresorhus/emoj
     utils.npm_install('emoj')
+
+    # asciinema.org
+    utils.apt_install("asciinema")
 
     # dotfiles
     utils.system("mkdir -p ~/.dotfiles_backup_#{$time}")
