@@ -110,14 +110,27 @@ tool "setup" do
     utils.apt_install("asciinema")
 
     # dotfiles
-    utils.system("mkdir -p ~/.dotfiles_backup_#{$time}")
-    utils.system("mv ~/.zshrc ~/.dotfiles_backup_#{$time}")
-    utils.system('cp -r .dotfiles ~')
-    utils.system('ln -s ~/.dotfiles/.zshrc ~/.zshrc')
+    dotfiles = ['.zshrc', '.aliases.zsh']
+
+    utils.system("mkdir -p ~/.dotfiles_backup_#{utils.time}")
+    dotfiles.each do |dotfile|
+      if File.exist?(dotfile) || File.symlink?(dotfile)
+        utils.system("mv ~/#{dotfile} ~/.dotfiles_backup_#{utils.time}")
+      end
+    end
+
+    utils.system("mkdir -p ~/.dotfiles")
+    utils.system('cp -r .dotfiles ~/.dotfiles')
+    dotfiles.each do |dotfile|
+      if File.exist?(dotfile) || File.symlink?(dotfile)
+        utils.system("ln -s ~/.dotfiles/#{dotfile} ~/#{dotfile}")
+      end
+    end
 
     # cleanup
     utils.apt("autoremove")
     utils.apt("clean")
+    utils.system('gem cleanup')
   end
 end
 
@@ -132,14 +145,11 @@ tool "update" do
     end
 
     utils.npm_install("npm@latest")
-    utils.system("gem update --system")
+    utils.system('gem update --system')
 
     utils.apt("update")
     utils.apt("upgrade")
 
     utils.apt("full-upgrade --fix-missing")
-
-    utils.apt("autoremove")
-    utils.apt("clean")
   end
 end

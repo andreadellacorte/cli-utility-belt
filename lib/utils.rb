@@ -15,6 +15,8 @@ class Utils
     @log_file = "#{@pwd}/logs/logs_#{@time}.txt"
   end
 
+  def time() @time; end
+
   def apt_install(packages)
     apt("install #{packages}")
   end
