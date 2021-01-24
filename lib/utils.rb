@@ -15,12 +15,16 @@ class Utils
     @log_file = "#{@pwd}/logs/logs_#{@time}.txt"
   end
 
-  def sudo_apt_install(packages)
-    sudo_apt("install #{packages}")
+  def apt_install(packages)
+    apt("install #{packages}")
   end
 
-  def sudo_apt(command)
-    sudo("apt --yes --quiet " + command)
+  def apt(command)
+    sudo("apt-get --yes --quiet " + command)
+  end
+
+  def npm_install(package)
+    sudo("npm install --global " + package)
   end
 
   def sudo(command)

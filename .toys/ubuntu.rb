@@ -26,14 +26,14 @@ tool "setup" do
     utils.system('echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list')
 
     # update repos after adding new ones
-    utils.sudo_apt("update")
+    utils.apt("update")
 
     # curl libraries
     utils.sudo("update-ca-certificates")
-    utils.sudo_apt_install("libcurl4-openssl-dev")
+    utils.apt_install("libcurl4-openssl-dev")
 
     # oh-my-zsh
-    utils.sudo_apt_install('zsh')
+    utils.apt_install('zsh')
 
     unless File.exist?("#{Dir.home}/.oh-my-zsh")
       utils.system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
@@ -41,23 +41,23 @@ tool "setup" do
 
     # NodeJS
     utils.system('curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -')
-    utils.sudo_apt_install('nodejs')
+    utils.apt_install('nodejs')
 
     # yarn
-    utils.sudo_apt_install('yarn')
+    utils.apt_install('yarn')
 
     # C++ tools
-    utils.sudo_apt_install('gcc g++ make')
+    utils.apt_install('gcc g++ make')
 
     # git + github cli
-    utils.sudo_apt_install('git')
-    utils.sudo_apt_install('gh')
+    utils.apt_install('git')
+    utils.apt_install('gh')
     utils.system('git config --global user.email "andrea@dellacorte.me"')
     utils.system('git config --global user.name "Andrea Della Corte"')
     utils.system('git config --global github.user andreadellacorte')
 
     # rbenv
-    utils.sudo_apt_install('rbenv')
+    utils.apt_install('rbenv')
 
     # ruby-build plugin for rbenv
     if File.exist?("#{utils::rbenv_home}/plugins/ruby-build")
@@ -81,27 +81,29 @@ tool "setup" do
 
     # rails
     utils.system('gem install rails')
-    utils.sudo_apt_install('postgresql postgresql-contrib libpq-dev')
-    utils.sudo_apt_install('ruby-dev libsqlite3-dev sqlite3')
+    utils.apt_install('postgresql postgresql-contrib libpq-dev')
+    utils.apt_install('ruby-dev libsqlite3-dev sqlite3')
     utils.sudo('gem install sqlite3-ruby')
 
     # suspenders for rails
-    utils.sudo_apt_install('libpq-dev')
+    utils.apt_install('libpq-dev')
     utils.system('gem install suspenders')
 
     # imagemagick
-    utils.sudo_apt_install('build-essential')
-    utils.sudo_apt_install('imagemagick')
-    utils.sudo_apt_install('ghostscript')
+    utils.apt_install('build-essential')
+    utils.apt_install('imagemagick')
+    utils.apt_install('ghostscript')
 
     # https://github.com/clvv/fasd
-    utils.sudo_apt_install('fasd')
+    utils.apt_install('fasd')
 
     # https://github.com/ytdl-org/youtube-dl
-    utils.sudo_apt_install('youtube-dl')
+    utils.apt_install('youtube-dl')
 
     # https://github.com/sindresorhus/fkill-cli
-    utils.sudo("npm install --global fkill-cli")
+    utils.npm_install('fkill-cli')
+
+    utils.npm_install('emoj')
 
     # dotfiles
     utils.system("mkdir -p ~/.dotfiles_backup_#{$time}")
@@ -110,8 +112,8 @@ tool "setup" do
     utils.system('ln -s ~/.dotfiles/.zshrc ~/.zshrc')
 
     # cleanup
-    utils.sudo_apt("autoremove")
-    utils.sudo_apt("clean")
+    utils.apt("autoremove")
+    utils.apt("clean")
   end
 end
 
@@ -125,15 +127,15 @@ tool "update" do
       utils.system("git -C $(rbenv root)/plugins/ruby-build pull")
     end
 
-    utils.sudo("npm install -g npm@latest")
+    utils.npm_install("npm@latest")
     utils.system("gem update --system")
 
-    utils.sudo_apt("update")
-    utils.sudo_apt("upgrade")
+    utils.apt("update")
+    utils.apt("upgrade")
 
-    utils.sudo_apt("full-upgrade --fix-missing")
+    utils.apt("full-upgrade --fix-missing")
 
-    utils.sudo_apt("autoremove")
-    utils.sudo_apt("clean")
+    utils.apt("autoremove")
+    utils.apt("clean")
   end
 end
