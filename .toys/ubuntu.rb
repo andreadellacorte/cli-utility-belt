@@ -28,6 +28,10 @@ tool "setup" do
     # update repos after adding new ones
     utils.sudo_apt("update")
 
+    # curl libraries
+    utils.sudo("update-ca-certificates")
+    utils.sudo_apt_install("libcurl4-openssl-dev")
+
     # oh-my-zsh
     utils.sudo_apt_install('zsh')
 
