@@ -15,8 +15,16 @@ class Utils
     @log_file = "#{@pwd}/logs/logs_#{@time}.txt"
   end
 
-  def apt_install(packages)
-    system("sudo apt-get install -y --quiet #{packages}")
+  def sudo_apt_install(packages)
+    sudo_apt("install #{packages}")
+  end
+
+  def sudo_apt(command)
+    sudo("apt --yes --quiet " + command)
+  end
+
+  def sudo(command)
+    system("sudo " + command)
   end
 
   def system(command)
