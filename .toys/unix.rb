@@ -14,10 +14,7 @@ tool "dirdos2unix" do
   required_arg :folder
 
   def run
-    bookmark = Dir.pwd
-    Dir.chdir folder
-    Utils.system('find . -type f -print0 | xargs -0 dos2unix')
-    Dir.chdir bookmark
+    Utils.new.system("find #{folder} -type f -print0 | xargs -0 dos2unix")
   end
 end
 
@@ -28,9 +25,7 @@ tool "pdf_scanned" do
 
   def run
     filename = File.basename file
-    utils = Utils.new
-
-    utils.system("convert -density 150 #{file} -colorspace 'gray' +noise Gaussian -rotate 0.5 -depth 2 scanned_#{filename}")
+    Utils.new.system("convert -density 150 #{file} -colorspace 'gray' +noise Gaussian -rotate 0.5 -depth 2 scanned_#{filename}")
 end
 end
 
@@ -41,8 +36,7 @@ tool "clean_whiteboard" do
 
   def run
     filename = File.basename file
-    utils = Utils.new
 
-    utils.system("convert #{file} -morphology Convolve DoG:15,100,0 -negate -normalize -blur 0x1 -channel RBG -level 60%,91%,0.1 cleaned_#{filename}")
+    Utils.new.system("convert #{file} -morphology Convolve DoG:15,100,0 -negate -normalize -blur 0x1 -channel RBG -level 60%,91%,0.1 cleaned_#{filename}")
   end
 end

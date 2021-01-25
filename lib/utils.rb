@@ -30,6 +30,8 @@ class Utils
   end
 
   def sudo(command)
+    Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true, %i[out err] => [@log_file, 'a'])
+
     system("sudo " + command)
   end
 
@@ -40,8 +42,6 @@ class Utils
     Kernel.system('mkdir -p logs', exception: true, %i[out err] => [@log_file, 'a'])
 
     begin
-      Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true, %i[out err] => [@log_file, 'a'])
-
       Whirly.start do
         Whirly.status = "Running #{command}"
         Kernel.system(command, exception: true, %i[out err] => [@log_file, 'a'])
@@ -51,9 +51,12 @@ class Utils
     end
   end
 
-  def rbenv_home
-    return '' if `which rbenv`.empty?
+  def rbenv_installed?
+    `which rbenv`
+  end
 
+  def rbenv_home
+    raise RuntimeError.new "rbenv is not installed" unless rbenv_installed?
     `echo $(rbenv root)`.delete!("\n")
   end
 end

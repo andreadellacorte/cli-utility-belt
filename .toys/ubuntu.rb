@@ -98,7 +98,9 @@ tool "setup" do
     utils.apt_install('fasd')
 
     # https://github.com/ytdl-org/youtube-dl
-    utils.apt_install('youtube-dl')
+    utils.apt('remove youtube-dl')
+    utils.apt_install('python3-pip')
+    utils.system('python3 -m pip install youtube-dl')
 
     # https://github.com/sindresorhus/fkill-cli
     utils.npm_install('fkill-cli')
@@ -114,17 +116,14 @@ tool "setup" do
 
     utils.system("mkdir -p ~/.dotfiles_backup_#{utils.time}")
     dotfiles.each do |dotfile|
-      if File.exist?(dotfile) || File.symlink?(dotfile)
-        utils.system("mv ~/#{dotfile} ~/.dotfiles_backup_#{utils.time}")
-      end
+      utils.system("rm ~/#{dotfile}") if File.symlink?("#{Dir.home}/#{dotfile}")
+      utils.system("mv ~/#{dotfile} ~/.dotfiles_backup_#{utils.time}") if File.exist?("#{Dir.home}/#{dotfile}")
     end
 
     utils.system("mkdir -p ~/.dotfiles")
-    utils.system('cp -r .dotfiles ~/.dotfiles')
+    utils.system('cp -r .dotfiles/ ~')
     dotfiles.each do |dotfile|
-      if File.exist?(dotfile) || File.symlink?(dotfile)
-        utils.system("ln -s ~/.dotfiles/#{dotfile} ~/#{dotfile}")
-      end
+      utils.system("ln -s ~/.dotfiles/#{dotfile} ~/#{dotfile}")
     end
 
     # cleanup
@@ -140,7 +139,7 @@ tool "update" do
   def run
     utils = Utils.new
 
-    if File.exist?("#{utils::rbenv_home}/plugins/ruby-build")
+    if utils.rbenv_installed && File.exist?("#{utils.rbenv_home}/plugins/ruby-build")
       utils.system("git -C $(rbenv root)/plugins/ruby-build pull")
     end
 
