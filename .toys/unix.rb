@@ -21,20 +21,28 @@ tool "dirdos2unix" do
   end
 end
 
-tool "makelookscanned" do
+tool "pdf_scanned" do
   desc "Makes a file look scanned"
 
   required_arg :file
 
   def run
-    foldername = File.dirname file
     filename = File.basename file
+    utils = Utils.new
 
-    bookmark = Dir.pwd
-    Dir.chdir foldername
+    utils.system("convert -density 150 #{file} -colorspace 'gray' +noise Gaussian -rotate 0.5 -depth 2 scanned_#{filename}")
+end
+end
 
-    Utils.system("convert -density 150 #{filename} -colorspace 'gray' +noise Gaussian -rotate 0.5 -depth 2 scanned_#{filename}")
+tool "clean_whiteboard" do
+  desc "Cleans up a whiteboard photo"
 
-    Dir.chdir bookmark
+  required_arg :file
+
+  def run
+    filename = File.basename file
+    utils = Utils.new
+
+    utils.system("convert #{file} -morphology Convolve DoG:15,100,0 -negate -normalize -blur 0x1 -channel RBG -level 60%,91%,0.1 cleaned_#{filename}")
   end
 end
