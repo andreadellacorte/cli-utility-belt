@@ -36,7 +36,7 @@ tool "setup" do
     utils.apt_install('zsh')
 
     unless File.exist?("#{Dir.home}/.oh-my-zsh")
-      utils.system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
+      utils.system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) -yes"')
     end
 
     # NodeJS
@@ -102,11 +102,17 @@ tool "setup" do
     utils.apt_install('python3-pip')
     utils.system('python3 -m pip install youtube-dl')
 
+    # python2 also needed
+    utils.apt_install('python2')
+
     # https://github.com/sindresorhus/fkill-cli
     utils.npm_install('fkill-cli')
 
     # https://github.com/sindresorhus/emoj
     utils.npm_install('emoj')
+
+    # https://github.com/stedolan/jq
+    utils.apt_install('jq')
 
     # asciinema.org
     utils.apt_install("asciinema")
