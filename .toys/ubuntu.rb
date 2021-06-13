@@ -11,8 +11,23 @@ include :terminal
 tool "setup" do
   desc "Sets up Ubuntu to a known state"
 
-  def run
+  def run 
     utils = Utils.new
+    
+    # dotfiles
+    dotfiles = ['.zshrc', '.aliases.zsh']
+
+    utils.system("mkdir -p ~/.dotfiles_backup_#{utils.time}")
+    dotfiles.each do |dotfile|
+      utils.system("rm ~/#{dotfile}") if File.symlink?("#{Dir.home}/#{dotfile}")
+      utils.system("mv ~/#{dotfile} ~/.dotfiles_backup_#{utils.time}") if File.exist?("#{Dir.home}/#{dotfile}")
+    end
+
+    utils.system("mkdir -p ~/.dotfiles")
+    utils.system('cp -r .dotfiles/ ~')
+    dotfiles.each do |dotfile|
+      utils.system("ln -s ~/.dotfiles/#{dotfile} ~/#{dotfile}")
+    end
 
     # https://github.com/cli/cli
     utils.sudo('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C99B11DEB97541F0')
@@ -38,6 +53,8 @@ tool "setup" do
     unless File.exist?("#{Dir.home}/.oh-my-zsh")
       utils.system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) -yes"')
     end
+    
+    utils.sudo("chsh $USER -s /usr/bin/zsh")
 
     # NodeJS
     utils.system('curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash -')
@@ -66,6 +83,8 @@ tool "setup" do
       utils.system("mkdir -p $(rbenv root)/plugins")
       utils.system("git clone https://github.com/rbenv/ruby-build.git $(rbenv root)/plugins/ruby-build")
     end
+    
+    utils.system('eval "$(rbenv init -)')
 
     utils.system("rbenv rehash")
 
@@ -116,21 +135,6 @@ tool "setup" do
 
     # asciinema.org
     utils.apt_install("asciinema")
-
-    # dotfiles
-    dotfiles = ['.zshrc', '.aliases.zsh']
-
-    utils.system("mkdir -p ~/.dotfiles_backup_#{utils.time}")
-    dotfiles.each do |dotfile|
-      utils.system("rm ~/#{dotfile}") if File.symlink?("#{Dir.home}/#{dotfile}")
-      utils.system("mv ~/#{dotfile} ~/.dotfiles_backup_#{utils.time}") if File.exist?("#{Dir.home}/#{dotfile}")
-    end
-
-    utils.system("mkdir -p ~/.dotfiles")
-    utils.system('cp -r .dotfiles/ ~')
-    dotfiles.each do |dotfile|
-      utils.system("ln -s ~/.dotfiles/#{dotfile} ~/#{dotfile}")
-    end
 
     # cleanup
     utils.apt("autoremove")
