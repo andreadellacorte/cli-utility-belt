@@ -84,7 +84,7 @@ tool "setup" do
       utils.system("git clone https://github.com/rbenv/ruby-build.git $(rbenv root)/plugins/ruby-build")
     end
     
-    utils.system('eval "$(rbenv init -)')
+    utils.system('eval "$(rbenv init -)"')
 
     utils.system("rbenv rehash")
 
