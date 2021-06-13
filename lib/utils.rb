@@ -30,7 +30,7 @@ class Utils
   end
 
   def sudo(command)
-    Kernel.system("sudo echo 'acquired sudo' > /dev/null", exception: true, %i[out err] => [@log_file, 'a'])
+    Kernel.system("sudo echo 'acquired sudo' > /dev/null 2>&1", exception: true, %i[out err] => [@log_file, 'a'])
 
     system("sudo " + command)
   end
