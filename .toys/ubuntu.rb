@@ -104,10 +104,6 @@ tool "setup" do
     utils.apt_install('ruby-dev libsqlite3-dev sqlite3')
     utils.sudo('gem install sqlite3-ruby')
 
-    # suspenders for rails
-    utils.apt_install('libpq-dev')
-    utils.system('gem install suspenders')
-
     # imagemagick
     utils.apt_install('build-essential')
     utils.apt_install('imagemagick')
